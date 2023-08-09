@@ -1,4 +1,4 @@
-# [Shimmer++. Creating Outputs]
+# Shimmer++. Creating Outputs
 
 The repo produce console application using the Shimmer++ libraries to create the different Outputs on
 the ledger of Stardust nodes.
