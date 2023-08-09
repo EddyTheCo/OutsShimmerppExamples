@@ -22,7 +22,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
+include(GNUInstallDirs)
 
 include(FetchContent)
 # Get the library that sends blocks to the Stardust nodes
@@ -91,6 +91,9 @@ qt_add_executable( ${example}  ${example}.cpp)
 message(STATUS "Configuring example ${example}" )
 # Link the used libraies in the executable
 target_link_libraries(${example} PRIVATE qclient qaddr_bundle qslip10 qed25519 qclientMQTT)
+
+# Install the different targets
+install(TARGETS ${example} DESTINATION ${CMAKE_INSTALL_BINDIR})
 # Coppy the DLLs in Windows
 if (WIN32 AND BUILD_SHARED_LIBS)
     add_custom_command(
@@ -102,4 +105,14 @@ endif ()
 
 endforeach()
 
-
+# Prepare Cpack to package the executables, headers and libraries 
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${SEMVER}-${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}")
+    if(NOT BUILD_SHARED_LIBS)
+        set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-static")
+    endif(NOT BUILD_SHARED_LIBS)
+    if(USE_THREADS)
+        set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-MThread")
+    endif(USE_THREADS)
+    include(CPack)
+endif()
