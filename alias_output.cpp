@@ -115,7 +115,8 @@ int main(int argc, char** argv)
                     dataf stateMetadata="Metadata that can only be changed by the state controller";
 
                     // Create a Alias Output https://wiki.iota.org/shimmer/tips/tips/TIP-0018/#alias-output
-                    auto aliasOut=Output::Alias(addr_bundle->amount,unlock_conditions,stateMetadata,0,0,{},{issuFea,imMetFea},{sendFea,metFea});
+                    auto aliasOut=Output::Alias(addr_bundle->amount,unlock_conditions,stateMetadata,0,0,{},
+                                                {issuFea,imMetFea},{sendFea,metFea});
 
                     // Calculate the Storage Deposit of the Basic output we want to create. https://wiki.iota.org/shimmer/tips/tips/TIP-0019/
                     const auto storDepo=Client::get_deposit(aliasOut,info);
@@ -142,12 +143,11 @@ int main(int argc, char** argv)
                         // Create a Transaction Payload https://wiki.iota.org/shimmer/tips/tips/TIP-0020/
                         auto trpay=Payload::Transaction(essence,addr_bundle->unlocks);
 
-                        // Create the Shimmer Client to communicate with the EVENT API of the nodes
-                        auto mqtt_client=new ClientMqtt(&a);
-                        mqtt_client->set_node_address(QUrl(argv[1]));
-
                         // Create a block https://wiki.iota.org/shimmer/tips/tips/TIP-0024/
                         auto block_=Block(trpay);
+
+                        // Create the Shimmer Client to communicate with the EVENT API of the nodes
+                        auto mqtt_client=new ClientMqtt(&a);
 
                         // Send the block after the client connects to the event API
                         QObject::connect(mqtt_client,&QMqttClient::stateChanged,&a,[=,&a]
@@ -166,6 +166,7 @@ int main(int argc, char** argv)
                                 iota_client->send_block(block_);
                             }
                         });
+                         mqtt_client->set_node_address(QUrl(argv[1]));
 
                     }
                     else
