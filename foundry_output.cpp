@@ -121,7 +121,7 @@ int main(int argc, char** argv)
                             // Add 1 to the foundry counter because we will create a foundry output
                             aliasOutput->foundry_counter_++;
 
-                            // Set the amount to the minimum storage deposit
+                            // Set the amount to the storage deposit
                             aliasOut->amount_=Client::get_deposit(aliasOut,info);
 
                             // Set the serial number of the Foundry Output
