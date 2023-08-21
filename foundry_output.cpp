@@ -91,7 +91,7 @@ int main(int argc, char** argv)
                     if(alias_node_outputs_->outs_.size())
                     {
 
-                        // Prepare the first Alias output returned by the node to be consumed
+                        // Prepare the first Alias output returned by the node to be state transitioned
                         addr_bundle->consume_outputs(alias_node_outputs_->outs_,0,1);
 
                         // Check that the outputs have make available some amount of base coins
