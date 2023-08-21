@@ -101,7 +101,7 @@ int main(int argc, char** argv)
                             // Get the address you control
                             const auto eddAddr=addr_bundle->get_address();
 
-                            // Get the first alias output after is prepared to be consumed
+                            // Get the first alias output after is prepared to be transitioned
                             auto aliasOut=addr_bundle->alias_outputs.front();
 
                             // Create a State Controller Address Unlock Condition https://wiki.iota.org/shimmer/tips/tips/TIP-0018/#state-controller-address-unlock-condition
