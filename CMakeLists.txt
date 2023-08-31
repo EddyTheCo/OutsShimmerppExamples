@@ -101,6 +101,13 @@ foreach(example "basic_output"
 	install(TARGETS ${example}
 		BUNDLE  DESTINATION .
 		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+	if (WIN32)
+		add_custom_command(
+			TARGET ${example} POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:${example}> $<TARGET_FILE_DIR:${example}>
+			COMMAND_EXPAND_LISTS
+			)
+	endif (WIN32)
 
 	if(QTDEPLOY)
 		qt_generate_deploy_app_script(
