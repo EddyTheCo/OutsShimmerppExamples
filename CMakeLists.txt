@@ -110,33 +110,29 @@ foreach(example "basic_output"
 	endif (WIN32)
 
 	if(QTDEPLOY)
-		set(deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_${example}.cmake")
-		file(GENERATE OUTPUT ${deploy_script} CONTENT "
-		include(\"${QT_DEPLOY_SUPPORT}\")
-
-		qt_deploy_runtime_dependencies(
-			EXECUTABLE \"\${QT_DEPLOY_BIN_DIR}/$<TARGET_FILE_NAME:${example}>\"
-			GENERATE_QT_CONF
-			PRE_INCLUDE_REGEXES \"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\"
-			)")
+		qt_generate_deploy_app_script(
+			TARGET ${example}
+			OUTPUT_SCRIPT deploy_script
+			PRE_INCLUDE_REGEXES ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+			)
 
 		install(SCRIPT ${deploy_script})
 	endif(QTDEPLOY)
-		if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
-			message(STATUS "Adding Test: ${example}" )
-			add_test(NAME ${example} COMMAND ${example} https://https://api.testnet.shimmer.network ef4593558d0c3ed9e3f7a2de766d33093cd72372c800fa47ab5765c43ca006b5)
-		endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
-	endforeach()
+	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+		message(STATUS "Adding Test: ${example}" )
+		add_test(NAME ${example} COMMAND ${example} https://https://api.testnet.shimmer.network ef4593558d0c3ed9e3f7a2de766d33093cd72372c800fa47ab5765c43ca006b5)
+	endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+endforeach()
 
-	# Prepare Cpack to package the executables, headers and libraries
-	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-		set(CPACK_PACKAGE_CONTACT "estervtech")
-		set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${SEMVER}-${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}")
-		if(NOT BUILD_SHARED_LIBS)
-			set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-static")
-		endif(NOT BUILD_SHARED_LIBS)
-		if(USE_THREADS)
-			set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-MThread")
-		endif(USE_THREADS)
-		include(CPack)
-	endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+# Prepare Cpack to package the executables, headers and libraries
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+	set(CPACK_PACKAGE_CONTACT "estervtech")
+	set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${SEMVER}-${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}")
+	if(NOT BUILD_SHARED_LIBS)
+		set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-static")
+	endif(NOT BUILD_SHARED_LIBS)
+	if(USE_THREADS)
+		set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-MThread")
+	endif(USE_THREADS)
+	include(CPack)
+endif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
