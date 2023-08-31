@@ -113,7 +113,7 @@ foreach(example "basic_output"
 		qt_generate_deploy_app_script(
 			TARGET ${example}
 			OUTPUT_SCRIPT deploy_script
-			PRE_INCLUDE_REGEXES ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+			PRE_INCLUDE_REGEXES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}*"
 			)
 
 		install(SCRIPT ${deploy_script})
